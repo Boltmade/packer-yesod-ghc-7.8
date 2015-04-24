@@ -1,0 +1,47 @@
+{
+  "builders": [{
+    "type": "virtualbox-iso",
+    "virtualbox_version_file": ".vbox_version",
+    "headless": false,
+
+    "guest_os_type": "Debian",
+    "guest_additions_mode": "disable",
+
+    "disk_size": 40960,
+
+    "iso_url": "http://cdimage.debian.org/debian-cd/7.8.0/i386/iso-cd/debian-7.8.0-i386-netinst.iso",
+    "iso_checksum_type": "sha512",
+    "iso_checksum": "c22be055c31fdd9a93afd850f47776e91e72f1deb697061850338e1245f4b6b1934c3a2a041e1002b2c103f5fe0d52f6ef26d12c528b99d4ffdd7fc67b4a3de1",
+
+    "http_directory": "http",
+
+    "boot_command": ["<esc><wait>auto url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg <enter><wait>"],
+
+    "ssh_username": "vagrant",
+    "ssh_password": "vagrant",
+    "ssh_port": 22,
+    "ssh_wait_timeout": "10000s",
+
+    "vboxmanage": [
+      ["modifyvm", "{{.Name}}", "--memory", "1024"],
+      ["modifyvm", "{{.Name}}", "--cpus", "1"],
+      ["modifyvm", "{{.Name}}", "--pae", "on"]
+    ],
+
+    "shutdown_command": "echo 'vagrant'|sudo -S /sbin/halt -h -p"
+  }],
+  "post-processors": [{
+    "output": "build/yesod.box",
+    "keep_input_artifact": true,
+    "type": "vagrant"
+  }],
+  "provisioners": [{
+    "type": "shell",
+    "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+    "scripts": [
+      "scripts/vagrant.sh",
+      "scripts/yesod.sh",
+      "scripts/compact.sh"
+    ]
+  }]
+}
