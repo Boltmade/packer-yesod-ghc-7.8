@@ -20,5 +20,5 @@ rm -rf /home/vagrant/.ghc
 echo 'export PATH="$PATH:$HOME/.cabal/bin"' >> /home/vagrant/.bashrc
 
 sudo -Hu vagrant /home/vagrant/.cabal/bin/cabal update
-sudo -Hu vagrant /home/vagrant/.cabal/bin/cabal install --constraint="haddock==2.15.0.2" cabal-install alex happy haddock yesod-bin
+sudo -Hu vagrant /home/vagrant/.cabal/bin/cabal install --constraint="haddock==2.15.0.2" alex happy haddock yesod-bin
 rm -rf /home/vagrant/.ghc
